@@ -1,0 +1,355 @@
+/* ══════════════════════════════════════════════════════════════
+   SafeChat — Content Script Styles
+   Scoped with .safechat- prefix to avoid host page conflicts
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─── CSS Custom Properties ─── */
+:root {
+  --sc-red: #ff4757;
+  --sc-red-bg: rgba(255,71,87,0.12);
+  --sc-orange: #ffa502;
+  --sc-orange-bg: rgba(255,165,2,0.12);
+  --sc-green: #2ed573;
+  --sc-green-bg: rgba(46,213,115,0.12);
+  --sc-blue: #667eea;
+  --sc-purple: #764ba2;
+  --sc-dark: #1a1a2e;
+  --sc-dark2: #16213e;
+  --sc-white: #f1f2f6;
+  --sc-glass: rgba(22,33,62,0.92);
+  --sc-glass-border: rgba(102,126,234,0.25);
+  --sc-font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --sc-radius: 12px;
+  --sc-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+/* ─── Animations ─── */
+@keyframes safechat-fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes safechat-slideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes safechat-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.4); }
+  50%      { box-shadow: 0 0 0 8px rgba(255,71,87,0); }
+}
+@keyframes safechat-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ─── Message Highlight Wrappers ─── */
+.safechat-highlight-high {
+  border-left: 3px solid var(--sc-red) !important;
+  background: var(--sc-red-bg) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+}
+.safechat-highlight-medium {
+  border-left: 3px solid var(--sc-orange) !important;
+  background: var(--sc-orange-bg) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+}
+.safechat-highlight-low {
+  border-left: 3px solid var(--sc-green) !important;
+  background: var(--sc-green-bg) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+}
+
+/* ─── Inline Badge ─── */
+.safechat-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 2px 8px !important;
+  border-radius: 10px !important;
+  font-family: var(--sc-font) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  margin-left: 6px !important;
+  animation: safechat-fadeIn 0.3s ease !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+.safechat-badge-high {
+  background: var(--sc-red) !important;
+  color: #fff !important;
+  animation: safechat-pulse 2s infinite !important;
+}
+.safechat-badge-medium {
+  background: var(--sc-orange) !important;
+  color: #1a1a2e !important;
+}
+.safechat-badge-low {
+  background: var(--sc-green) !important;
+  color: #1a1a2e !important;
+}
+.safechat-badge svg {
+  width: 10px !important;
+  height: 10px !important;
+  fill: currentColor !important;
+}
+
+/* ─── Tooltip ─── */
+.safechat-tooltip {
+  position: absolute !important;
+  z-index: 2147483647 !important;
+  background: var(--sc-glass) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 14px 18px !important;
+  min-width: 280px !important;
+  max-width: 380px !important;
+  box-shadow: var(--sc-shadow) !important;
+  font-family: var(--sc-font) !important;
+  color: var(--sc-white) !important;
+  animation: safechat-fadeIn 0.25s ease !important;
+  pointer-events: auto !important;
+}
+.safechat-tooltip-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.safechat-tooltip-body {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: rgba(241,242,246,0.8) !important;
+}
+.safechat-tooltip-category {
+  display: inline-block !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  margin: 2px 3px 2px 0 !important;
+  background: rgba(102,126,234,0.2) !important;
+  color: #a8b5ff !important;
+}
+.safechat-tooltip-score {
+  margin-top: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.safechat-tooltip-score-bar {
+  flex: 1 !important;
+  height: 4px !important;
+  background: rgba(255,255,255,0.1) !important;
+  border-radius: 2px !important;
+  overflow: hidden !important;
+}
+.safechat-tooltip-score-fill {
+  height: 100% !important;
+  border-radius: 2px !important;
+  transition: width 0.4s ease !important;
+}
+.safechat-tooltip-legal {
+  margin-top: 10px !important;
+  padding-top: 10px !important;
+  border-top: 1px solid rgba(255,255,255,0.1) !important;
+}
+.safechat-tooltip-legal-title {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: var(--sc-orange) !important;
+  margin-bottom: 4px !important;
+}
+.safechat-tooltip-legal-item {
+  font-size: 11px !important;
+  color: rgba(241,242,246,0.7) !important;
+  margin-bottom: 3px !important;
+  padding-left: 8px !important;
+  border-left: 2px solid rgba(255,165,2,0.3) !important;
+}
+.safechat-tooltip-actions {
+  margin-top: 10px !important;
+  display: flex !important;
+  gap: 6px !important;
+}
+.safechat-tooltip-btn {
+  padding: 5px 12px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  font-family: var(--sc-font) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.safechat-tooltip-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.1) !important;
+}
+.safechat-btn-report {
+  background: var(--sc-red) !important;
+  color: #fff !important;
+}
+.safechat-btn-legal {
+  background: var(--sc-orange) !important;
+  color: #1a1a2e !important;
+}
+.safechat-btn-dismiss {
+  background: rgba(255,255,255,0.1) !important;
+  color: var(--sc-white) !important;
+}
+
+/* ─── Warning Modal Overlay ─── */
+.safechat-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+  background: rgba(0,0,0,0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: safechat-fadeIn 0.2s ease !important;
+}
+.safechat-modal {
+  background: var(--sc-glass) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: 16px !important;
+  padding: 28px 32px !important;
+  width: 420px !important;
+  max-width: 90vw !important;
+  box-shadow: var(--sc-shadow) !important;
+  font-family: var(--sc-font) !important;
+  color: var(--sc-white) !important;
+  animation: safechat-slideUp 0.35s cubic-bezier(0.16,1,0.3,1) !important;
+}
+.safechat-modal-icon {
+  width: 56px !important;
+  height: 56px !important;
+  margin: 0 auto 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  font-size: 28px !important;
+}
+.safechat-modal-icon-high { background: var(--sc-red-bg) !important; }
+.safechat-modal-icon-medium { background: var(--sc-orange-bg) !important; }
+.safechat-modal-title {
+  text-align: center !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+.safechat-modal-subtitle {
+  text-align: center !important;
+  font-size: 13px !important;
+  color: rgba(241,242,246,0.7) !important;
+  margin-bottom: 16px !important;
+  line-height: 1.5 !important;
+}
+.safechat-modal-detail {
+  background: rgba(0,0,0,0.25) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  margin-bottom: 16px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+  color: rgba(241,242,246,0.8) !important;
+}
+.safechat-modal-detail strong {
+  color: var(--sc-white) !important;
+}
+.safechat-modal-legal {
+  background: rgba(255,165,2,0.08) !important;
+  border: 1px solid rgba(255,165,2,0.2) !important;
+  border-radius: 8px !important;
+  padding: 10px 12px !important;
+  margin-bottom: 16px !important;
+  font-size: 11px !important;
+  color: rgba(255,165,2,0.9) !important;
+  line-height: 1.5 !important;
+}
+.safechat-modal-legal-header {
+  font-weight: 700 !important;
+  margin-bottom: 4px !important;
+  font-size: 12px !important;
+}
+.safechat-modal-buttons {
+  display: flex !important;
+  gap: 8px !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+}
+.safechat-modal-btn {
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  font-family: var(--sc-font) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  min-width: 100px !important;
+}
+.safechat-modal-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+.safechat-btn-edit {
+  background: var(--sc-blue) !important;
+  color: #fff !important;
+}
+.safechat-btn-cancel {
+  background: var(--sc-red) !important;
+  color: #fff !important;
+}
+.safechat-btn-send {
+  background: rgba(255,255,255,0.08) !important;
+  color: rgba(241,242,246,0.6) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* ─── Toast Notification ─── */
+.safechat-toast {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 2147483646 !important;
+  background: var(--sc-glass) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--sc-glass-border) !important;
+  border-radius: var(--sc-radius) !important;
+  padding: 12px 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  box-shadow: var(--sc-shadow) !important;
+  font-family: var(--sc-font) !important;
+  color: var(--sc-white) !important;
+  font-size: 13px !important;
+  animation: safechat-slideUp 0.3s ease !important;
+  max-width: 350px !important;
+}
+.safechat-toast-icon {
+  font-size: 20px !important;
+  flex-shrink: 0 !important;
+}
+.safechat-toast-close {
+  margin-left: auto !important;
+  background: none !important;
+  border: none !important;
+  color: rgba(241,242,246,0.5) !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  padding: 0 !important;
+}

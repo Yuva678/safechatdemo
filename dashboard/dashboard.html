@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeChat Dashboard — Threat Analytics</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none">
+        <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill="url(#sg)" opacity="0.9"/>
+        <path d="M10 15.5l-3.5-3.5 1.41-1.41L10 12.67l5.59-5.59L17 8.5l-7 7z" fill="#fff"/>
+        <defs><linearGradient id="sg" x1="3" y1="2" x2="21" y2="19"><stop stop-color="#667eea"/><stop offset="1" stop-color="#764ba2"/></linearGradient></defs>
+      </svg>
+      <span>SafeChat Dashboard</span>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" id="refreshBtn">🔄 Refresh</button>
+      <button class="nav-btn danger" id="reportBtn">🚨 Report Cybercrime</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- Stats Row -->
+    <section class="stats-row">
+      <div class="stat-card glow-blue">
+        <div class="stat-card-icon">🔍</div>
+        <div class="stat-card-data">
+          <div class="stat-card-value" id="totalScanned">0</div>
+          <div class="stat-card-label">Messages Scanned</div>
+        </div>
+      </div>
+      <div class="stat-card glow-red">
+        <div class="stat-card-icon">🛡</div>
+        <div class="stat-card-data">
+          <div class="stat-card-value" id="totalThreats">0</div>
+          <div class="stat-card-label">Total Threats</div>
+        </div>
+      </div>
+      <div class="stat-card glow-orange">
+        <div class="stat-card-icon">💬</div>
+        <div class="stat-card-data">
+          <div class="stat-card-value" id="totalBullying">0</div>
+          <div class="stat-card-label">Bullying Detected</div>
+        </div>
+      </div>
+      <div class="stat-card glow-green">
+        <div class="stat-card-icon">🔗</div>
+        <div class="stat-card-data">
+          <div class="stat-card-value" id="totalScams">0</div>
+          <div class="stat-card-label">Scams Blocked</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts Row -->
+    <section class="charts-row">
+      <div class="chart-card">
+        <h3>Threat Distribution</h3>
+        <canvas id="pieChart" width="280" height="280"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Risk Levels</h3>
+        <canvas id="barChart" width="380" height="280"></canvas>
+      </div>
+    </section>
+
+    <!-- Alerts Table -->
+    <section class="table-section">
+      <div class="table-header">
+        <h3>Recent Alerts</h3>
+        <button class="nav-btn small" id="clearBtn">Clear All</button>
+      </div>
+      <div class="table-wrap">
+        <table id="alertsTable">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Platform</th>
+              <th>Type</th>
+              <th>Severity</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody id="alertsBody"></tbody>
+        </table>
+        <div class="empty-table" id="emptyTable">
+          <span>✨</span>
+          <p>No alerts recorded yet</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Legal Resources -->
+    <section class="legal-section">
+      <h3>🇮🇳 Legal Resources & Helplines</h3>
+      <div class="legal-grid">
+        <a href="https://cybercrime.gov.in" target="_blank" class="legal-card">
+          <div class="legal-card-icon">🌐</div>
+          <div><strong>National Cyber Crime Portal</strong><br><span>cybercrime.gov.in</span></div>
+        </a>
+        <div class="legal-card">
+          <div class="legal-card-icon">📞</div>
+          <div><strong>Cyber Crime Helpline</strong><br><span>1930</span></div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-icon">🆘</div>
+          <div><strong>Women Helpline</strong><br><span>181</span></div>
+        </div>
+        <div class="legal-card">
+          <div class="legal-card-icon">👶</div>
+          <div><strong>Childline India</strong><br><span>1098</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

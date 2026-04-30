@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeChat Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" fill="url(#shieldGrad)" opacity="0.9"/>
+            <path d="M10 15.5l-3.5-3.5 1.41-1.41L10 12.67l5.59-5.59L17 8.5l-7 7z" fill="#fff"/>
+            <defs>
+              <linearGradient id="shieldGrad" x1="3" y1="2" x2="21" y2="19">
+                <stop stop-color="#667eea"/><stop offset="1" stop-color="#764ba2"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>SafeChat</h1>
+          <p>AI Cyberbullying & Scam Shield</p>
+        </div>
+      </div>
+      <div class="toggle-wrapper">
+        <label class="toggle" id="toggleLabel">
+          <input type="checkbox" id="toggleSwitch" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <!-- Status -->
+  <div class="status-bar" id="statusBar">
+    <span class="status-dot active" id="statusDot"></span>
+    <span id="statusText">Protection Active</span>
+    <span class="status-platform" id="statusPlatform"></span>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(102,126,234,0.15); color: #667eea">🔍</div>
+      <div class="stat-value" id="statScanned">0</div>
+      <div class="stat-label">Scanned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(255,71,87,0.15); color: #ff4757">🛡</div>
+      <div class="stat-value" id="statThreats">0</div>
+      <div class="stat-label">Threats</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(255,165,2,0.15); color: #ffa502">💬</div>
+      <div class="stat-value" id="statBullying">0</div>
+      <div class="stat-label">Bullying</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(46,213,115,0.15); color: #2ed573">🔗</div>
+      <div class="stat-value" id="statScams">0</div>
+      <div class="stat-label">Scams</div>
+    </div>
+  </div>
+
+  <!-- Recent Alerts -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Recent Alerts</h2>
+      <button class="clear-btn" id="clearAlerts">Clear All</button>
+    </div>
+    <div class="alerts-list" id="alertsList">
+      <div class="empty-state" id="emptyState">
+        <span class="empty-icon">✨</span>
+        <p>No threats detected yet. You're safe!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="actions">
+    <button class="action-btn primary" id="openDashboard">
+      <span>📊</span> Full Dashboard
+    </button>
+    <button class="action-btn secondary" id="reportCrime">
+      <span>🚨</span> Report Cybercrime
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>SafeChat v1.0 — Protecting your digital space</p>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

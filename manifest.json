@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "SafeChat — AI Cyberbullying & Scam Shield",
+  "version": "1.0.0",
+  "description": "AI-powered real-time protection against cyberbullying, scams, and online harassment with legal awareness for Indian users.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "notifications"
+  ],
+  "host_permissions": [
+    "*://web.whatsapp.com/*",
+    "*://twitter.com/*",
+    "*://x.com/*",
+    "*://www.instagram.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://web.whatsapp.com/*",
+        "*://twitter.com/*",
+        "*://x.com/*",
+        "*://www.instagram.com/*"
+      ],
+      "js": [
+        "modules/toxicity-engine.js",
+        "modules/scam-detector.js",
+        "modules/legal-data.js",
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "SafeChat Shield"
+  }
+}

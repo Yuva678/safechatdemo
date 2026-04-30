@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icons</title></head>
+<body>
+<script>
+// Auto-generate and save icons
+function generateIcon(size) {
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const ctx = c.getContext('2d');
+  
+  // Background gradient circle
+  const grad = ctx.createLinearGradient(0, 0, size, size);
+  grad.addColorStop(0, '#667eea');
+  grad.addColorStop(1, '#764ba2');
+  ctx.beginPath();
+  ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  
+  // Shield shape
+  const s = size * 0.32;
+  const cx = size/2, cy = size * 0.48;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - s);
+  ctx.lineTo(cx + s*0.85, cy - s*0.55);
+  ctx.lineTo(cx + s*0.85, cy + s*0.1);
+  ctx.quadraticCurveTo(cx + s*0.6, cy + s*0.7, cx, cy + s);
+  ctx.quadraticCurveTo(cx - s*0.6, cy + s*0.7, cx - s*0.85, cy + s*0.1);
+  ctx.lineTo(cx - s*0.85, cy - s*0.55);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
+  ctx.fill();
+  
+  // Checkmark
+  if (size >= 32) {
+    ctx.strokeStyle = '#667eea';
+    ctx.lineWidth = Math.max(1.5, size * 0.04);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx - s*0.25, cy);
+    ctx.lineTo(cx - s*0.05, cy + s*0.22);
+    ctx.lineTo(cx + s*0.3, cy - s*0.18);
+    ctx.stroke();
+  }
+  
+  return c.toDataURL('image/png');
+}
+
+// Create download links
+[16, 48, 128].forEach(size => {
+  const dataURL = generateIcon(size);
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = `icon${size}.png`;
+  a.click();
+});
+
+document.body.innerHTML = '<h2 style="font-family:system-ui;color:#667eea">Icons downloaded! Move them to the icons/ folder.</h2>';
+</script>
+</body>
+</html>

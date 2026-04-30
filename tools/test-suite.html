@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeChat — AI Engine Test Suite</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',system-ui,sans-serif; background:#0a0a14; color:#e8e8f0; padding:32px; }
+    h1 { font-size:24px; margin-bottom:8px; background:linear-gradient(135deg,#667eea,#f093fb);
+         -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .subtitle { color:rgba(232,232,240,0.4); margin-bottom:24px; }
+    .test-section { margin-bottom:32px; }
+    .test-section h2 { font-size:16px; color:#667eea; margin-bottom:12px; }
+    textarea { width:100%; height:80px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+               border-radius:8px; padding:12px; color:#e8e8f0; font-family:inherit; font-size:14px; resize:vertical; }
+    textarea:focus { outline:none; border-color:#667eea; }
+    button { padding:10px 24px; border-radius:8px; border:none; font-family:inherit; font-size:14px;
+             font-weight:600; cursor:pointer; margin-top:8px; transition:all 0.2s; }
+    .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+    .btn-primary:hover { transform:translateY(-1px); }
+    .result { margin-top:12px; padding:16px; border-radius:10px; background:rgba(255,255,255,0.03);
+              border:1px solid rgba(255,255,255,0.06); font-size:13px; line-height:1.6; white-space:pre-wrap; }
+    .severity-badge { display:inline-block; padding:2px 10px; border-radius:6px; font-size:11px; font-weight:700; text-transform:uppercase; }
+    .sev-high { background:rgba(255,71,87,0.15); color:#ff4757; }
+    .sev-medium { background:rgba(255,165,2,0.15); color:#ffa502; }
+    .sev-low { background:rgba(46,213,115,0.15); color:#2ed573; }
+    .sev-safe { background:rgba(102,126,234,0.15); color:#667eea; }
+    .samples { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+    .sample { padding:4px 10px; border-radius:6px; background:rgba(255,255,255,0.06); font-size:12px; cursor:pointer; transition:background 0.2s; }
+    .sample:hover { background:rgba(102,126,234,0.2); }
+    hr { border:none; border-top:1px solid rgba(255,255,255,0.06); margin:24px 0; }
+  </style>
+</head>
+<body>
+  <h1>🛡 SafeChat AI Engine Test Suite</h1>
+  <p class="subtitle">Test the toxicity detection and scam analysis engines interactively.</p>
+
+  <div class="test-section">
+    <h2>💬 Toxicity Detection</h2>
+    <p style="font-size:12px;color:rgba(232,232,240,0.4);margin-bottom:8px">Type or select a sample message:</p>
+    <div class="samples" id="toxSamples"></div>
+    <textarea id="toxInput" placeholder="Type a message to analyze..."></textarea>
+    <button class="btn-primary" onclick="runToxicity()">Analyze Toxicity</button>
+    <div class="result" id="toxResult" style="display:none"></div>
+  </div>
+
+  <hr>
+
+  <div class="test-section">
+    <h2>🔗 Scam / Phishing Detection</h2>
+    <p style="font-size:12px;color:rgba(232,232,240,0.4);margin-bottom:8px">Type or select a sample message:</p>
+    <div class="samples" id="scamSamples"></div>
+    <textarea id="scamInput" placeholder="Type a message or paste a URL..."></textarea>
+    <button class="btn-primary" onclick="runScam()">Analyze for Scams</button>
+    <div class="result" id="scamResult" style="display:none"></div>
+  </div>
+
+  <hr>
+
+  <div class="test-section">
+    <h2>⚖ Legal Awareness Lookup</h2>
+    <p style="font-size:12px;color:rgba(232,232,240,0.4);margin-bottom:8px">Select a category:</p>
+    <div class="samples" id="legalSamples"></div>
+    <div class="result" id="legalResult" style="display:none"></div>
+  </div>
+
+  <script src="../modules/toxicity-engine.js"></script>
+  <script src="../modules/scam-detector.js"></script>
+  <script src="../modules/legal-data.js"></script>
+  <script>
+    // Sample data
+    const toxicitySamples = [
+      "You're so stupid, nobody likes you",
+      "I'll find where you live and hurt you",
+      "Everyone hates you, go die",
+      "Great job on the presentation today!",
+      "You're worthless trash, shut up loser",
+      "Send me your photos or I'll expose you",
+      "If you loved me you would do this",
+    ];
+    const scamSamples = [
+      "Congratulations! You've won ₹50,000! Claim now at http://amaz0n.com/prize",
+      "URGENT: Your SBI account is suspended. Verify at http://sbi-online.xyz/login",
+      "Send me your OTP to verify your Paytm KYC update",
+      "Check out this article: https://www.bbc.com/news",
+      "Free Bitcoin airdrop! Act now, limited time: http://crypto-free.tk/claim",
+      "Your account has unauthorized access. Confirm identity at http://faceb00k.com/verify",
+    ];
+    const legalCategories = ['threats', 'harassment', 'hate_speech', 'sexual_harassment', 'profanity'];
+
+    // Render samples
+    const toxSamplesEl = document.getElementById('toxSamples');
+    toxicitySamples.forEach((s, i) => {
+      const el = document.createElement('span');
+      el.className = 'sample';
+      el.textContent = s.slice(0, 40) + (s.length > 40 ? '...' : '');
+      el.onclick = () => { document.getElementById('toxInput').value = s; runToxicity(); };
+      toxSamplesEl.appendChild(el);
+    });
+
+    const scamSamplesEl = document.getElementById('scamSamples');
+    scamSamples.forEach((s, i) => {
+      const el = document.createElement('span');
+      el.className = 'sample';
+      el.textContent = s.slice(0, 40) + (s.length > 40 ? '...' : '');
+      el.onclick = () => { document.getElementById('scamInput').value = s; runScam(); };
+      scamSamplesEl.appendChild(el);
+    });
+
+    const legalSamplesEl = document.getElementById('legalSamples');
+    legalCategories.forEach(cat => {
+      const el = document.createElement('span');
+      el.className = 'sample';
+      el.textContent = cat.replace(/_/g, ' ');
+      el.onclick = () => showLegal(cat);
+      legalSamplesEl.appendChild(el);
+    });
+
+    function runToxicity() {
+      const text = document.getElementById('toxInput').value;
+      const result = SafeChatToxicity.analyze(text);
+      const el = document.getElementById('toxResult');
+      el.style.display = 'block';
+      const sevClass = 'sev-' + result.severity;
+      el.innerHTML = `
+        <strong>Result:</strong> <span class="severity-badge ${sevClass}">${result.severity.toUpperCase()}</span>
+        <br><strong>Toxic:</strong> ${result.toxic ? '🔴 Yes' : '🟢 No'}
+        <br><strong>Score:</strong> ${(result.score * 100).toFixed(1)}%
+        <br><strong>Categories:</strong> ${result.categories.length ? result.categories.map(c => c.label + ' (' + (c.score * 100).toFixed(0) + '%)').join(', ') : 'None'}
+        <br><strong>Explanation:</strong> ${result.explanation}
+      `;
+    }
+
+    function runScam() {
+      const text = document.getElementById('scamInput').value;
+      const result = SafeChatScam.analyzeMessage(text);
+      const el = document.getElementById('scamResult');
+      el.style.display = 'block';
+      const sevClass = 'sev-' + result.riskLevel;
+      let urlInfo = '';
+      if (result.urlResults.length) {
+        urlInfo = '<br><strong>URLs Analyzed:</strong><br>' + result.urlResults.map(u =>
+          `  • ${u.hostname} — <span class="severity-badge sev-${u.riskLevel}">${u.riskLevel}</span> ${u.reasons.join(', ')}`
+        ).join('<br>');
+      }
+      el.innerHTML = `
+        <strong>Result:</strong> <span class="severity-badge ${sevClass}">${result.riskLevel.toUpperCase()}</span>
+        <br><strong>Scam:</strong> ${result.isScam ? '🔴 Yes' : '🟢 No'}
+        <br><strong>Score:</strong> ${(result.score * 100).toFixed(1)}%
+        <br><strong>Patterns:</strong> ${result.patterns.length ? result.patterns.map(p => p.label).join(', ') : 'None'}
+        <br><strong>Reasoning:</strong> ${result.reasoning}
+        ${urlInfo}
+      `;
+    }
+
+    function showLegal(category) {
+      const info = SafeChatLegal.getLegalInfo([category]);
+      const el = document.getElementById('legalResult');
+      el.style.display = 'block';
+      let html = '';
+      for (const law of info.laws) {
+        html += `<strong style="color:#ffa502">${law.title}</strong><br>`;
+        html += `<em style="color:rgba(232,232,240,0.5);font-size:12px">${law.warning}</em><br><br>`;
+        for (const s of law.sections) {
+          html += `  📜 <strong>${s.law}</strong><br>     ${s.note}<br><br>`;
+        }
+      }
+      html += `<br><span style="font-size:11px;color:rgba(232,232,240,0.3)">⚠ ${info.disclaimer}</span>`;
+      el.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
